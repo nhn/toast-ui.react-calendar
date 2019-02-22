@@ -76,7 +76,6 @@ export default class Calendar extends React.Component {
   }
 
   componentWillUnmount() {
-    this.unbindEventHandlers();
     this.calendarInst.destroy();
   }
 
