@@ -5,62 +5,41 @@
 import React from 'react';
 import TuiCalendar from 'tui-calendar';
 
+/**
+ * Calendar's options prop
+ * @type {string[]}
+ */
+const optionProps = [
+  'disableDblClick',
+  'isReadOnly',
+  'month',
+  'scheduleView',
+  'taskView',
+  'theme',
+  'timeZone',
+  'week'
+];
+
 export default class Calendar extends React.Component {
   rootEl = React.createRef();
 
-  optionProps = [
-    'disableDblClick',
-    'isReadOnly',
-    'month',
-    'scheduleView',
-    'taskView',
-    'theme',
-    'timeZone',
-    'week'
-  ];
+  defaultProps = {
+    height: '100%'
+  };
 
   calendarInst = null;
 
   componentDidMount() {
-    const {
-      calendars = [],
-      disableDblClick = false,
-      isReadOnly = false,
-      month = {},
-      scheduleView = true,
-      taskView = true,
-      template = {},
-      theme = {},
-      timezones = [],
-      useCreationPopup = true,
-      useDetailPopup = true,
-      view = 'week',
-      week = {}
-    } = this.props;
+    const {schedules = [], view} = this.props;
 
     this.calendarInst = new TuiCalendar(this.rootEl.current, {
       ...this.props,
-      calendars,
-      defaultView: view,
-      disableDblClick,
-      isReadOnly,
-      month,
-      scheduleView,
-      taskView,
-      template,
-      theme,
-      timezones,
-      useCreationPopup,
-      useDetailPopup,
-      week
+      defaultView: view
     });
 
-    this.bindEventHandlers();
-
-    const {schedules = []} = this.props;
-
-    this.setCalendars(calendars);
     this.setSchedules(schedules);
+
+    this.bindEventHandlers();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -87,7 +66,7 @@ export default class Calendar extends React.Component {
       this.calendarInst.changeView(nextProps.view);
     }
 
-    this.optionProps.forEach((key) => {
+    optionProps.forEach((key) => {
       if (this.props[key] !== nextProps[key]) {
         this.setOptions(key, nextProps[key]);
       }
@@ -130,24 +109,15 @@ export default class Calendar extends React.Component {
   }
 
   bindEventHandlers() {
-    Object.keys(this.props)
-      .filter((key) => /on[A-Z][a-zA-Z]+/.test(key))
-      .forEach((key) => {
-        const eventName = key[2].toLowerCase() + key.slice(3);
-        this.calendarInst.on(eventName, this.props[key]);
-      });
-  }
+    const eventHandlerNames = Object.keys(this.props).filter((key) => /on[A-Z][a-zA-Z]+/.test(key));
 
-  unbindEventHandlers() {
-    Object.keys(this.props)
-      .filter((key) => /on[A-Z][a-zA-Z]+/.test(key))
-      .forEach((key) => {
-        const eventName = key[2].toLowerCase() + key.slice(3);
-        this.calendarInst.off(eventName);
-      });
+    eventHandlerNames.forEach((key) => {
+      const eventName = key[2].toLowerCase() + key.slice(3);
+      this.calendarInst.on(eventName, this.props[key]);
+    });
   }
 
   render() {
-    return <div ref={this.rootEl} style={{height: this.props.height || '100%'}} />;
+    return <div ref={this.rootEl} style={{height: this.props.height}} />;
   }
 }
