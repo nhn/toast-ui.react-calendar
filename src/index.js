@@ -1,6 +1,6 @@
 /**
  * @fileoverview TOAST UI Calendar React wrapper component
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @author NHN. FE Development Lab <dl_javascript@nhn.com>
  */
 import React from 'react';
 import TuiCalendar from 'tui-calendar';
