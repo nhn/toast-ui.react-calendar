@@ -23,18 +23,18 @@ const optionProps = [
 export default class Calendar extends React.Component {
   rootEl = React.createRef();
 
-  defaultProps = {
+  static defaultProps = {
     height: '100%'
   };
 
   calendarInst = null;
 
   componentDidMount() {
-    const {schedules = [], view} = this.props;
+    const {schedules = [], view, defaultView} = this.props;
 
     this.calendarInst = new TuiCalendar(this.rootEl.current, {
       ...this.props,
-      defaultView: view
+      defaultView: view || defaultView
     });
 
     this.setSchedules(schedules);
