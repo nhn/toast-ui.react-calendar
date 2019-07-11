@@ -56,15 +56,23 @@ You can use Toast UI Calendar for React as a ECMAScript module or a CommonJS mod
 * Using ECMAScript module
 
 ```js
-import 'tui-calendar/dist/tui-calendar.css'
-import Calendar from '@toast-ui/react-calendar'
+import Calendar from '@toast-ui/react-calendar';
+import 'tui-calendar/dist/tui-calendar.css';
+
+// If you use the default popups, use this.
+import 'tui-date-picker/dist/tui-date-picker.css';
+import 'tui-time-picker/dist/tui-time-picker.css';
 ```
 
 * Using CommonJS module
 
 ```js
-require('tui-calendar/dist/tui-calendar.css');
 var Calendar = require('@toast-ui/react-calendar');
+require('tui-calendar/dist/tui-calendar.css');
+
+// If you use the default popups, use this.
+require('tui-date-picker/dist/tui-date-picker.css');
+require('tui-time-picker/dist/tui-time-picker.css');
 ```
 
 ### Props
