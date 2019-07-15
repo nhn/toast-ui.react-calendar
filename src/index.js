@@ -23,7 +23,7 @@ const optionProps = [
 export default class Calendar extends React.Component {
   rootEl = React.createRef();
 
-  defaultProps = {
+  static defaultProps = {
     height: '100%'
   };
 
