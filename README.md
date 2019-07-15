@@ -1,12 +1,12 @@
 # TOAST UI Calendar for React
 
-> This is a React component wrapping [TOAST UI Calendar](https://github.com/nhnent/tui.calendar).
+> This is a React component wrapping [TOAST UI Calendar](https://github.com/nhn/tui.calendar).
 
- [![github version](https://img.shields.io/github/release/nhnent/toast-ui.react-calendar.svg)](https://github.com/nhnent/toast-ui.react-calendar/releases/latest)
+ [![github version](https://img.shields.io/github/release/nhnent/toast-ui.react-calendar.svg)](https://github.com/nhn/toast-ui.react-calendar/releases/latest)
 [![npm version](https://img.shields.io/npm/v/@toast-ui/react-calendar.svg)](https://www.npmjs.com/package/@toast-ui/react-calendar)
-[![license](https://img.shields.io/github/license/nhnent/toast-ui.vue-calendar.svg)](https://github.com/nhnent/toast-ui.react-calendar/blob/master/LICENSE)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](https://github.com/nhnent/toast-ui.react-calendar/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
-[![code with hearth by NHN](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-NHN-ff1414.svg)](https://github.com/nhnent)
+[![license](https://img.shields.io/github/license/nhnent/toast-ui.vue-calendar.svg)](https://github.com/nhn/toast-ui.react-calendar/blob/master/LICENSE)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](https://github.com/nhn/toast-ui.react-calendar/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+[![code with hearth by NHN](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-NHN-ff1414.svg)](https://github.com/nhn)
 
 ## 🚩 Table of Contents
 * [Collect statistics on the use of open source](#collect-statistics-on-the-use-of-open-source)
@@ -76,8 +76,7 @@ require('tui-time-picker/dist/tui-time-picker.css');
 ```
 
 ### Props
-
-[All the options of the TOAST UI Calendar](http://nhnent.github.io/tui.calendar/latest/Calendar.html) are supported in the form of props.
+We are supported in the form of props for [Options of TOAST UI Calendar](https://nhn.github.io/tui.calendar/latest/Options). Each name of props is same options of Toast UI Calendar except `view` is for `defaultView` of option. Additionally you can set schedules using `schedules` of prop.
 
 ```js
 const myTheme = {
@@ -86,6 +85,7 @@ const myTheme = {
 
 const MyComponent = () => (
   <Calendar
+    height="900px"
     calendars={[
       {
         id: '0',
@@ -100,9 +100,8 @@ const MyComponent = () => (
         borderColor: '#00a9ff'
       }
     ]}
-    defaultView="month"
     disableDblClick={true}
-    height="90%"
+    disableClick={false}
     isReadOnly={false}
     month={{
       startDayOfWeek: 0
@@ -180,7 +179,7 @@ const MyComponent = () => (
     ]}
     useDetailPopup
     useCreationPopup
-    view={selectedView}
+    view={selectedView} // You can also set the `defaultView` option.
     week={{
       showTimezoneCollapseButton: true,
       timezonesCollapsed: true
@@ -190,11 +189,11 @@ const MyComponent = () => (
 ```
 
 #### Theme
-Write own theme object. [Link - See "themeConfig"](https://nhnent.github.io/tui.calendar/latest/global.html)
+Write own theme object. [Link - See "themeConfig"](https://nhn.github.io/tui.calendar/latest/themeConfig)
 
 ### Instance Methods
 
-For using [instance methods of TOAST UI Calendar](https://nhnent.github.io/tui.date-picker/latest/DatePicker.html#.createCalendar), first thing to do is creating Refs of wrapper component using [`createRef()`](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs). But the wrapper component does not provide a way to call instance methods of TOAST UI Calendar directly. Instead, you can call `getInstance()` method of the wrapper component to get the instance, and call the methods on it.
+For using [instance methods of TOAST UI Calendar](https://nhn.github.io/tui.calendar/latest/Calendar), first thing to do is creating Refs of wrapper component using [`createRef()`](https://reactjs.org/docs/refs-and-the-dom.html#creating-refs). But the wrapper component does not provide a way to call instance methods of TOAST UI Calendar directly. Instead, you can call `getInstance()` method of the wrapper component to get the instance, and call the methods on it.
 
 ```js
 const calendarOptions = {
@@ -203,7 +202,7 @@ const calendarOptions = {
 
 class MyComponent extends React.Component {
   calendarRef = React.createRef();
-  
+
   handleClickNextButton = () => {
     const calendarInstance = this.calendarRef.current.getInstance();
 
@@ -213,7 +212,7 @@ class MyComponent extends React.Component {
   render() {
     return (
       <>
-        <Calendar 
+        <Calendar
           ref={this.calendarRef}
           {...calendarOptions}
         />
@@ -231,7 +230,7 @@ An instance of the wrapper component also provides a handy method for getting th
 ```js
 class MyComponent extends React.Component {
   calendarRef = React.createRef();
-  
+
   handleClickButton = () => {
     this.calendarRef.current.getRootElement().classList.add('calendar-root');
   };
@@ -239,9 +238,9 @@ class MyComponent extends React.Component {
   render() {
     return (
       <>
-        <Calendar 
+        <Calendar
           ref={this.calendarRef}
-          {...calendarOptions} 
+          {...calendarOptions}
         />
         <button onClick={this.handleClickButton}>Click!</button>
       </>
@@ -252,7 +251,7 @@ class MyComponent extends React.Component {
 
 ### Event
 
-[All the events of TOAST UI Calendar](https://nhnent.github.io/tui.calendar/latest/Calendar.html#event:afterRenderSchedule) are supported in the form of `on[EventName]` props. The first letter of each event name should be capitalized. For example, for using `mousedown` event you can use `onMousedown` prop like the example below.
+[All the events of TOAST UI Calendar](https://nhn.github.io/tui.calendar/latest/Calendar#event-afterRenderSchedule) are supported in the form of `on[EventName]` props. The first letter of each event name should be capitalized. For example, for using `mousedown` event you can use `onMousedown` prop like the example below.
 
 ```js
 class MyComponent extends React.Component {
@@ -265,7 +264,7 @@ class MyComponent extends React.Component {
 
   render() {
     return (
-      <Calendar 
+      <Calendar
         onClickDayname={this.handleClickDayname}
       />
     );
@@ -301,13 +300,10 @@ If it has no error, commit and then push it!
 
 For more information on PR's step, please see links of Contributing section.
 
-## 📙 Documents
-* [Getting Started](https://github.com/nhnent/toast-ui.react-calendar/blob/master/docs/getting-started.md)
-
 ## 💬 Contributing
-* [Code of Conduct](https://github.com/nhnent/toast-ui.react-calendar/blob/master/CODE_OF_CONDUCT.md)
-* [Contributing guideline](https://github.com/nhnent/toast-ui.react-calendar/blob/master/CONTRIBUTING.md)
-* [Commit convention](https://github.com/nhnent/toast-ui.react-calendar/blob/master/docs/COMMIT_MESSAGE_CONVENTION.md)
+* [Code of Conduct](https://github.com/nhn/toast-ui.react-calendar/blob/master/CODE_OF_CONDUCT.md)
+* [Contributing guideline](https://github.com/nhn/toast-ui.react-calendar/blob/master/CONTRIBUTING.md)
+* [Commit convention](https://github.com/nhn/toast-ui.react-calendar/blob/master/docs/COMMIT_MESSAGE_CONVENTION.md)
 
 ## 📜 License
-This software is licensed under the [MIT](./LICENSE) © [NHN.](https://github.com/nhnent)
+This software is licensed under the [MIT](./LICENSE) © [NHN.](https://github.com/nhn)
