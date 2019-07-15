@@ -33,7 +33,7 @@ stories.add('Simple Example', () => {
 
     state = {
       dateRange: '',
-      view: '',
+      view: 'week',
       viewModeOptions: [
         {
           title: 'Monthly',
@@ -112,11 +112,11 @@ stories.add('Simple Example', () => {
 
       const theme = {};
       if (timezonesCollapsed) {
-        theme['week.timegridLeft.width'] = '100px';
-        theme['week.daygridLeft.width'] = '100px';
+        theme['week.daygridLeft.width'] = '200px';
+        theme['week.timegridLeft.width'] = '200px';
       } else {
-        theme['week.timegridLeft.width'] = '50px';
-        theme['week.daygridLeft.width'] = '50px';
+        theme['week.daygridLeft.width'] = '100px';
+        theme['week.timegridLeft.width'] = '100px';
       }
 
       this.calendarInst.setTheme(theme);
@@ -201,6 +201,7 @@ stories.add('Simple Example', () => {
             <span className="render-range">{dateRange}</span>
           </div>
           <Calendar
+            usageStatistics={false}
             calendars={[
               {
                 id: '0',
@@ -217,7 +218,7 @@ stories.add('Simple Example', () => {
             ]}
             defaultView="month"
             disableDblClick={true}
-            height="90%"
+            height="900px"
             isReadOnly={false}
             month={{
               startDayOfWeek: 0
@@ -298,7 +299,7 @@ stories.add('Simple Example', () => {
             view={selectedView}
             week={{
               showTimezoneCollapseButton: true,
-              timezonesCollapsed: true
+              timezonesCollapsed: false
             }}
             ref={this.ref}
             onAfterRenderSchedule={this.onAfterRenderSchedule.bind(this)}

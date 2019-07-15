@@ -85,6 +85,7 @@ const myTheme = {
 
 const MyComponent = () => (
   <Calendar
+    height="900px"
     calendars={[
       {
         id: '0',
@@ -101,7 +102,6 @@ const MyComponent = () => (
     ]}
     disableDblClick={true}
     disableClick={false}
-    height="90%"
     isReadOnly={false}
     month={{
       startDayOfWeek: 0
