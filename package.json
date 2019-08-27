@@ -5,7 +5,8 @@
   "main": "dist/toastui-react-calendar.js",
   "files": [
     "dist",
-    "src"
+    "src",
+    "index.d.ts"
   ],
   "scripts": {
     "build:dev": "webpack --mode development",
