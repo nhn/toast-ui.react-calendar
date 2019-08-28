@@ -1,7 +1,7 @@
 declare module '@toast-ui/react-calendar' {
-  import * as React from "react";
+  import {Component} from "react";
 
-  import tuiCalendar, {
+  import TuiCalendar, {
     ISchedule,
     IEvents,
     IOptions
@@ -23,14 +23,14 @@ declare module '@toast-ui/react-calendar' {
     [K in keyof EventNameMapping]?: IEvents[EventNameMapping[K]]
   };
 
- type Props = IOptions & {
+  type Props = IOptions & EventMaps & {
     height: string;
     view?: string;
     schedules?: ISchedule[];
-  } & EventMaps;
+  };
 
-  export default class Calendar extends React.Component<Props> {
-    public getInstance(): typeof tuiCalendar;
+  export default class Calendar extends Component<Props> {
+    public getInstance(): TuiCalendar;
     public getRootElement(): HTMLElement;
   }
 }
