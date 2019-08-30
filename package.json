@@ -14,7 +14,8 @@
     "build": "webpack --mode production",
     "serve": "webpack-dev-server",
     "storybook": "start-storybook -s .storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "release-note": "tuie"
   },
   "homepage": "https://github.com/nhnent/toast-ui.react-calendar",
   "bugs": "https://github.com/nhnent/toast-ui.react-calendar/issues",
@@ -52,9 +53,10 @@
     "style-loader": "^0.23.1",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.1.14",
+    "tui-release-notes": "git+https://github.com/nhn/tui.release-notes.git"
   },
   "dependencies": {
-    "tui-calendar": "^1.10.0"
+    "tui-calendar": "^1.12.5"
   }
 }
