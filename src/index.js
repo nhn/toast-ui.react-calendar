@@ -16,15 +16,16 @@ const optionProps = [
   'scheduleView',
   'taskView',
   'theme',
-  'timeZone',
+  'timezones',
   'week'
 ];
 
 export default class Calendar extends React.Component {
   rootEl = React.createRef();
 
-  defaultProps = {
-    height: '100%'
+  static defaultProps = {
+    height: '800px',
+    view: 'week'
   };
 
   calendarInst = null;
