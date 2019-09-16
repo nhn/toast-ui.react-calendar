@@ -26,7 +26,7 @@ type Props = IOptions & EventMaps & {
   height: string;
   view?: string;
   schedules?: ISchedule[];
-} & HTMLAttributes<HTMLDivElement>;
+} & HTMLAttributes<HTMLElement>;
 
 export default class Calendar extends Component<Props> {
   public getInstance(): TuiCalendar;
