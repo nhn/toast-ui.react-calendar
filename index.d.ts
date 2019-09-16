@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {HTMLAttributes, Component} from "react";
 
 import TuiCalendar, {
   ISchedule,
@@ -26,7 +26,7 @@ type Props = IOptions & EventMaps & {
   height: string;
   view?: string;
   schedules?: ISchedule[];
-};
+} & HTMLAttributes<HTMLElement>;
 
 export default class Calendar extends Component<Props> {
   public getInstance(): TuiCalendar;
