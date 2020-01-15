@@ -110,16 +110,13 @@ export default class Calendar extends React.Component {
     return this.rootEl.current;
   }
 
-  bindEventHandlers = (props, prevProps) => {
+  bindEventHandlers = (props) => {
     const eventHandlerNames = Object.keys(props).filter((key) => /on[A-Z][a-zA-Z]+/.test(key));
 
     eventHandlerNames.forEach((key) => {
       const eventName = key[2].toLowerCase() + key.slice(3);
-      // For <Calendar onFocus={condition ? onFocus1 : onFocus2} />
-      if (prevProps && prevProps[key] !== props[key]) {
-        this.calendarInst.off(eventName);
-      }
-      this.calendarInst.on(eventName, this.props[key]);
+      this.calendarInst.off(eventName);
+      this.calendarInst.on(eventName, props[key]);
     });
   }
 
