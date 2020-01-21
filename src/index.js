@@ -111,14 +111,14 @@ export default class Calendar extends React.Component {
   }
 
   bindEventHandlers = (props) => {
-    const eventHandlerNames = Object.keys(props).filter((key) => /on[A-Z][a-zA-Z]+/.test(key));
+    const eventHandlerNames = Object.keys(props).filter((key) => /^on[A-Z][a-zA-Z]+/.test(key));
 
     eventHandlerNames.forEach((key) => {
       const eventName = key[2].toLowerCase() + key.slice(3);
       this.calendarInst.off(eventName);
       this.calendarInst.on(eventName, props[key]);
     });
-  }
+  };
 
   render() {
     return <div ref={this.rootEl} style={{height: this.props.height}} />;
