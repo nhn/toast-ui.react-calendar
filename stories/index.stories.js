@@ -68,8 +68,9 @@ stories.add('Simple Example', () => {
       console.log('Schedule Info : ', res.schedule);
       console.groupEnd();
 
-      const idx = this.state.scheduleList.findIndex((item) => item.id === res.schedule.id);
-      this.setState({scheduleList: [...this.state.scheduleList.splice(idx, 1)]});
+      const {id, calendarId} = res.schedule;
+
+      this.calendarInst.deleteSchedule(id, calendarId);
     }
 
     onChangeSelect(ev) {
@@ -155,6 +156,40 @@ stories.add('Simple Example', () => {
       }
 
       this.setState({dateRange: dateRangeText});
+    }
+
+    onBeforeUpdateSchedule(event) {
+      const {schedule} = event;
+      const {changes} = event;
+
+      this.calendarInst.updateSchedule(schedule.id, schedule.calendarId, changes);
+    }
+
+    onBeforeCreateSchedule(scheduleData) {
+      const {calendar} = scheduleData;
+      const schedule = {
+        id: String(Math.random()),
+        title: scheduleData.title,
+        isAllDay: scheduleData.isAllDay,
+        start: scheduleData.start,
+        end: scheduleData.end,
+        category: scheduleData.isAllDay ? 'allday' : 'time',
+        dueDateClass: '',
+        location: scheduleData.location,
+        raw: {
+          class: scheduleData.raw['class']
+        },
+        state: scheduleData.state
+      };
+
+      if (calendar) {
+        schedule.calendarId = calendar.id;
+        schedule.color = calendar.color;
+        schedule.bgColor = calendar.bgColor;
+        schedule.borderColor = calendar.borderColor;
+      }
+
+      this.calendarInst.createSchedules([schedule]);
     }
 
     render() {
@@ -307,6 +342,8 @@ stories.add('Simple Example', () => {
             onClickDayname={this.onClickDayname.bind(this)}
             onClickSchedule={this.onClickSchedule.bind(this)}
             onClickTimezonesCollapseBtn={this.onClickTimezonesCollapseBtn.bind(this)}
+            onBeforeUpdateSchedule={this.onBeforeUpdateSchedule.bind(this)}
+            onBeforeCreateSchedule={this.onBeforeCreateSchedule.bind(this)}
           />
         </div>
       );
