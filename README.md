@@ -48,6 +48,7 @@ npm install --save @toast-ui/react-calendar
 ```
 
 ## 📊 Usage
+We provide a [simple example](https://codesandbox.io/s/toast-uireact-calendar-82fi9) and you can start right away.
 
 ### Import
 
