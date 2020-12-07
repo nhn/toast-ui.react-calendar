@@ -17,7 +17,8 @@ const optionProps = [
   'taskView',
   'theme',
   'timezones',
-  'week'
+  'week',
+  'template'
 ];
 
 export default class Calendar extends React.Component {
