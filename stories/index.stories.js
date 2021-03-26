@@ -317,18 +317,20 @@ stories.add('Simple Example', () => {
               }
             }}
             theme={myTheme}
-            timezones={[
-              {
-                timezoneOffset: 540,
-                displayLabel: 'GMT+09:00',
-                tooltip: 'Seoul'
-              },
-              {
-                timezoneOffset: -420,
-                displayLabel: 'GMT-08:00',
-                tooltip: 'Los Angeles'
-              }
-            ]}
+            timezone={{
+              zones: [
+                {
+                  timezoneName: 'Asia/Seoul',
+                  tooltip: 'Seoul',
+                  displayLabel: 'GMT+09:00'
+                },
+                {
+                  timezoneName: 'America/New_York',
+                  tooltip: 'New York',
+                  displayLabel: 'GMT-05:00'
+                }
+              ]
+            }}
             useDetailPopup
             useCreationPopup
             view={selectedView}

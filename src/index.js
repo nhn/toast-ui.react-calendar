@@ -16,7 +16,7 @@ const optionProps = [
   'scheduleView',
   'taskView',
   'theme',
-  'timezones',
+  'timezone',
   'week',
   'template'
 ];
