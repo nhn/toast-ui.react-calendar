@@ -17,28 +17,29 @@ const getDate = (type, start, value, operator) => {
   return start;
 };
 
-class Story extends React.Component {
+const viewModeOptions = [
+  {
+    title: 'Monthly',
+    value: 'month'
+  },
+  {
+    title: 'Weekly',
+    value: 'week'
+  },
+  {
+    title: 'Daily',
+    value: 'day'
+  }
+];
+
+class ClassComponent extends React.Component {
   ref = React.createRef();
 
   calendarInst = null;
 
   state = {
     dateRange: '',
-    view: 'week',
-    viewModeOptions: [
-      {
-        title: 'Monthly',
-        value: 'month'
-      },
-      {
-        title: 'Weekly',
-        value: 'week'
-      },
-      {
-        title: 'Daily',
-        value: 'day'
-      }
-    ]
+    view: 'week'
   };
 
   componentDidMount() {
@@ -182,7 +183,7 @@ class Story extends React.Component {
   }
 
   render() {
-    const {dateRange, view, viewModeOptions} = this.state;
+    const {dateRange, view} = this.state;
     const selectedView = view || this.props.view;
 
     return (
@@ -339,11 +340,323 @@ class Story extends React.Component {
   }
 }
 
+// eslint-disable-next-line require-jsdoc
+function FunctionComponent({view}) {
+  const calendarRef = React.useRef();
+  const [selectedDateRangeText, setSelectedDateRangeText] = React.useState('');
+  const [selectedView, setSelectedView] = React.useState(view);
+  const calendars = [
+    {
+      id: '0',
+      name: 'Private',
+      bgColor: '#9e5fff',
+      borderColor: '#9e5fff'
+    },
+    {
+      id: '1',
+      name: 'Company',
+      bgColor: '#00a9ff',
+      borderColor: '#00a9ff'
+    }
+  ];
+
+  const getCalInstance = React.useCallback(() => calendarRef.current.getInstance(), []);
+
+  const updateRenderRangeText = React.useCallback(() => {
+    const calInstance = getCalInstance();
+    if (!calInstance) {
+      setSelectedDateRangeText('');
+    }
+
+    const viewName = calInstance.getViewName();
+    const calDate = calInstance.getDate();
+    const rangeStart = calInstance.getDateRangeStart();
+    const rangeEnd = calInstance.getDateRangeEnd();
+
+    let year = calDate.getFullYear();
+    let month = calDate.getMonth() + 1;
+    let date = calDate.getDate();
+    let dateRangeText = '';
+
+    switch (viewName) {
+      case 'month': {
+        dateRangeText = `${year}-${month}`;
+        break;
+      }
+      case 'week': {
+        year = rangeStart.getFullYear();
+        month = rangeStart.getMonth() + 1;
+        date = rangeStart.getDate();
+        const endMonth = rangeEnd.getMonth() + 1;
+        const endDate = rangeEnd.getDate();
+
+        const start = `${year}-${month < 10 ? '0' : ''}${month}-${date < 10 ? '0' : ''}${date}`;
+        const end = `${year}-${endMonth < 10 ? '0' : ''}${endMonth}-${
+          endDate < 10 ? '0' : ''
+        }${endDate}`;
+        dateRangeText = `${start} ~ ${end}`;
+        break;
+      }
+      default:
+        dateRangeText = `${year}-${month}-${date}`;
+    }
+
+    setSelectedDateRangeText(dateRangeText);
+  }, []);
+
+  React.useEffect(() => {
+    setSelectedView(view);
+  }, [view]);
+
+  React.useEffect(() => {
+    updateRenderRangeText();
+  }, [selectedView, updateRenderRangeText]);
+
+  const onAfterRenderSchedule = (res) => {
+    console.group('onAfterRenderSchedule');
+    console.log('Schedule Info : ', res.schedule);
+    console.groupEnd();
+  };
+
+  const onBeforeDeleteSchedule = (res) => {
+    console.group('onBeforeDeleteSchedule');
+    console.log('Schedule Info : ', res.schedule);
+    console.groupEnd();
+
+    const {id, calendarId} = res.schedule;
+
+    getCalInstance().deleteSchedule(id, calendarId);
+  };
+
+  const onChangeSelect = (ev) => {
+    setSelectedView(ev.target.value);
+  };
+
+  const onClickDayName = (res) => {
+    console.group('onClickDayName');
+    console.log('Date : ', res.date);
+    console.groupEnd();
+  };
+
+  const onClickNavi = (ev) => {
+    if (ev.target.tagName === 'BUTTON') {
+      const {target} = ev;
+      const actionName = target.getAttribute('data-action').replace('move-', '');
+      getCalInstance()[actionName]();
+      updateRenderRangeText();
+    }
+  };
+
+  const onClickSchedule = (res) => {
+    console.group('onClickSchedule');
+    console.log('MouseEvent : ', res.event);
+    console.log('Calendar Info : ', res.calendar);
+    console.log('Schedule Info : ', res.schedule);
+    console.groupEnd();
+  };
+
+  const onClickTimezonesCollapseBtn = (timezoneCollapsed) => {
+    console.group('onClickTimezonesCollapseBtn');
+    console.log('Is Timezone Collapsed?: ', timezoneCollapsed);
+    console.groupEnd();
+
+    const newTheme = {
+      'week.daygridLeft.width': timezoneCollapsed ? '200px' : '100px',
+      'week.timegridLeft.width': timezoneCollapsed ? '200px' : '100px'
+    };
+
+    getCalInstance().setTheme(newTheme);
+  };
+
+  const onBeforeUpdateSchedule = (ev) => {
+    const {schedule, changes} = ev;
+
+    getCalInstance().updateSchedule(schedule.id, schedule.calendarId, changes);
+  };
+
+  const onBeforeCreateSchedule = (scheduleData) => {
+    const schedule = {
+      id: String(Math.random()),
+      title: scheduleData.title,
+      isAllDay: scheduleData.isAllDay,
+      start: scheduleData.start,
+      end: scheduleData.end,
+      category: scheduleData.isAllDay ? 'allday' : 'time',
+      dueDateClass: '',
+      location: scheduleData.location,
+      raw: {
+        class: scheduleData.raw['class']
+      },
+      state: scheduleData.state
+    };
+    const calendar = calendars.find((cal) => cal.id === scheduleData.calendarId);
+
+    if (calendar) {
+      schedule.calendarId = calendar.id;
+      schedule.color = calendar.color;
+      schedule.bgColor = calendar.bgColor;
+      schedule.borderColor = calendar.borderColor;
+    }
+
+    getCalInstance().createSchedules([schedule]);
+  };
+
+  return (
+    <div>
+      <h1>🍞📅 TOAST UI Calendar + React.js</h1>
+      <div>
+        <select onChange={onChangeSelect} value={selectedView}>
+          {viewModeOptions.map((option, index) => (
+            <option value={option.value} key={index}>
+              {option.title}
+            </option>
+          ))}
+        </select>
+        <span>
+          <button
+            type="button"
+            className="btn btn-default btn-sm move-today"
+            data-action="move-today"
+            onClick={onClickNavi}
+          >
+            Today
+          </button>
+          <button
+            type="button"
+            className="btn btn-default btn-sm move-day"
+            data-action="move-prev"
+            onClick={onClickNavi}
+          >
+            Prev
+          </button>
+          <button
+            type="button"
+            className="btn btn-default btn-sm move-day"
+            data-action="move-next"
+            onClick={onClickNavi}
+          >
+            Next
+          </button>
+        </span>
+        <span className="render-range">{selectedDateRangeText}</span>
+      </div>
+      <Calendar
+        usageStatistics={false}
+        calendars={calendars}
+        defaultView={selectedView}
+        disableDblClick={true}
+        height="900px"
+        isReadOnly={false}
+        month={{
+          startDayOfWeek: 2
+        }}
+        schedules={[
+          {
+            id: '1',
+            calendarId: '0',
+            title: 'TOAST UI Calendar Study',
+            category: 'time',
+            dueDateClass: '',
+            start: today.toISOString(),
+            end: getDate('hours', today, 3, '+').toISOString()
+          },
+          {
+            id: '2',
+            calendarId: '0',
+            title: 'Practice',
+            category: 'milestone',
+            dueDateClass: '',
+            start: getDate('date', today, 1, '+').toISOString(),
+            end: getDate('date', today, 1, '+').toISOString(),
+            isReadOnly: true
+          },
+          {
+            id: '3',
+            calendarId: '0',
+            title: 'FE Workshop',
+            category: 'allday',
+            dueDateClass: '',
+            start: getDate('date', today, 2, '-').toISOString(),
+            end: getDate('date', today, 1, '-').toISOString(),
+            isReadOnly: true
+          },
+          {
+            id: '4',
+            calendarId: '0',
+            title: 'Report',
+            category: 'time',
+            dueDateClass: '',
+            start: today.toISOString(),
+            end: getDate('hours', today, 1, '+').toISOString()
+          }
+        ]}
+        scheduleView
+        taskView
+        template={{
+          milestone(schedule) {
+            return `<span style="color:#fff;background-color: ${schedule.bgColor};">${
+              schedule.title
+            }</span>`;
+          },
+          milestoneTitle() {
+            return 'Milestone';
+          },
+          allday(schedule) {
+            return `${schedule.title}<i class="fa fa-refresh"></i>`;
+          },
+          alldayTitle() {
+            return 'All Day';
+          }
+        }}
+        theme={myTheme}
+        timezones={[
+          {
+            timezoneOffset: 540,
+            displayLabel: 'GMT+09:00',
+            tooltip: 'Seoul'
+          },
+          {
+            timezoneOffset: -420,
+            displayLabel: 'GMT-08:00',
+            tooltip: 'Los Angeles'
+          }
+        ]}
+        useDetailPopup
+        useCreationPopup
+        view={selectedView}
+        week={{
+          showTimezoneCollapseButton: true,
+          timezonesCollapsed: false
+        }}
+        ref={calendarRef}
+        onAfterRenderSchedule={onAfterRenderSchedule}
+        onBeforeDeleteSchedule={onBeforeDeleteSchedule}
+        onClickDayname={onClickDayName}
+        onClickSchedule={onClickSchedule}
+        onClickTimezonesCollapseBtn={onClickTimezonesCollapseBtn}
+        onBeforeUpdateSchedule={onBeforeUpdateSchedule}
+        onBeforeCreateSchedule={onBeforeCreateSchedule}
+      />
+    </div>
+  );
+}
+
 export default {
-  title: 'Simple Calendar Example',
+  title: 'Wrapper Examples',
   component: Calendar
 };
 
-const Template = (args) => <Story {...args} />;
+export const WithClassComponent = (args) => <ClassComponent {...args} />;
 
-export const Default = Template.bind({});
+export const WithFunctionComponent = (args) => <FunctionComponent {...args} />;
+WithFunctionComponent.args = {
+  view: 'month'
+};
+WithFunctionComponent.argTypes = {
+  view: {
+    control: {
+      type: 'select',
+      options: ['month', 'week', 'day']
+    }
+  }
+};
