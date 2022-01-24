@@ -7,7 +7,7 @@ module.exports = {
       jsx: true
     }
   },
-  extends: ['tui/es6', 'plugin:react/recommended', 'plugin:prettier/recommended'],
+  extends: ['tui/es6', 'plugin:react/recommended', 'plugin:prettier/recommended', 'plugin:storybook/recommended'],
   plugins: ['react', 'prettier'],
   rules: {
     'react/prop-types': 0
