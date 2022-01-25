@@ -103,14 +103,10 @@ class ClassComponent extends React.Component {
     console.log('Is Collapsed Timezone? ', timezonesCollapsed);
     console.groupEnd();
 
-    const theme = {};
-    if (timezonesCollapsed) {
-      theme['week.daygridLeft.width'] = '200px';
-      theme['week.timegridLeft.width'] = '200px';
-    } else {
-      theme['week.daygridLeft.width'] = '100px';
-      theme['week.timegridLeft.width'] = '100px';
-    }
+    const theme = {
+      'week.daygridLeft.width': '100px',
+      'week.timegridLeft.width': '100px'
+    };
 
     this.calendarInst.setTheme(theme);
   }
@@ -148,16 +144,23 @@ class ClassComponent extends React.Component {
     this.setState({dateRange: dateRangeText});
   }
 
-  onBeforeUpdateSchedule(event) {
-    const {schedule} = event;
-    const {changes} = event;
+  onBeforeUpdateSchedule(updateData) {
+    console.group('onBeforeUpdateSchedule');
+    console.log(updateData);
+    console.groupEnd();
+    const targetSchedule = updateData.schedule;
+    const changes = {
+      start: updateData.start,
+      end: updateData.end,
+      ...(updateData.changes || {})
+    };
 
-    this.calendarInst.updateSchedule(schedule.id, schedule.calendarId, changes);
+    this.calendarInst.updateSchedule(targetSchedule.id, targetSchedule.calendarId, changes);
   }
 
   onBeforeCreateSchedule(scheduleData) {
-    const {calendar} = scheduleData;
     const schedule = {
+      calendarId: scheduleData.calendarId || '',
       id: String(Math.random()),
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
@@ -166,18 +169,9 @@ class ClassComponent extends React.Component {
       category: scheduleData.isAllDay ? 'allday' : 'time',
       dueDateClass: '',
       location: scheduleData.location,
-      raw: {
-        class: scheduleData.raw['class']
-      },
-      state: scheduleData.state
+      state: scheduleData.state,
+      isPrivate: scheduleData.isPrivate
     };
-
-    if (calendar) {
-      schedule.calendarId = calendar.id;
-      schedule.color = calendar.color;
-      schedule.bgColor = calendar.bgColor;
-      schedule.borderColor = calendar.borderColor;
-    }
 
     this.calendarInst.createSchedules([schedule]);
   }
@@ -232,12 +226,14 @@ class ClassComponent extends React.Component {
               id: '0',
               name: 'Private',
               bgColor: '#9e5fff',
+              dragBgColor: '#9e5fff',
               borderColor: '#9e5fff'
             },
             {
               id: '1',
               name: 'Company',
               bgColor: '#00a9ff',
+              dragBgColor: '#00a9ff',
               borderColor: '#00a9ff'
             }
           ]}
@@ -345,18 +341,60 @@ function FunctionComponent({view}) {
   const calendarRef = React.useRef();
   const [selectedDateRangeText, setSelectedDateRangeText] = React.useState('');
   const [selectedView, setSelectedView] = React.useState(view);
-  const calendars = [
+  const initialCalendars = [
     {
       id: '0',
       name: 'Private',
       bgColor: '#9e5fff',
-      borderColor: '#9e5fff'
+      borderColor: '#9e5fff',
+      dragBgColor: '#9e5fff'
     },
     {
       id: '1',
       name: 'Company',
       bgColor: '#00a9ff',
-      borderColor: '#00a9ff'
+      borderColor: '#00a9ff',
+      dragBgColor: '#00a9ff'
+    }
+  ];
+  const initialSchedules = [
+    {
+      id: '1',
+      calendarId: '0',
+      title: 'TOAST UI Calendar Study',
+      category: 'time',
+      dueDateClass: '',
+      start: today.toISOString(),
+      end: getDate('hours', today, 3, '+').toISOString()
+    },
+    {
+      id: '2',
+      calendarId: '0',
+      title: 'Practice',
+      category: 'milestone',
+      dueDateClass: '',
+      start: getDate('date', today, 1, '+').toISOString(),
+      end: getDate('date', today, 1, '+').toISOString(),
+      isReadOnly: true
+    },
+    {
+      id: '3',
+      calendarId: '0',
+      title: 'FE Workshop',
+      category: 'allday',
+      dueDateClass: '',
+      start: getDate('date', today, 2, '-').toISOString(),
+      end: getDate('date', today, 1, '-').toISOString(),
+      isReadOnly: true
+    },
+    {
+      id: '4',
+      calendarId: '0',
+      title: 'Report',
+      category: 'time',
+      dueDateClass: '',
+      start: today.toISOString(),
+      end: getDate('hours', today, 1, '+').toISOString()
     }
   ];
 
@@ -461,21 +499,30 @@ function FunctionComponent({view}) {
     console.groupEnd();
 
     const newTheme = {
-      'week.daygridLeft.width': timezoneCollapsed ? '200px' : '100px',
-      'week.timegridLeft.width': timezoneCollapsed ? '200px' : '100px'
+      'week.daygridLeft.width': '100px',
+      'week.timegridLeft.width': '100px'
     };
 
     getCalInstance().setTheme(newTheme);
   };
 
-  const onBeforeUpdateSchedule = (ev) => {
-    const {schedule, changes} = ev;
+  const onBeforeUpdateSchedule = (updateData) => {
+    console.group('onBeforeUpdateSchedule');
+    console.log(updateData);
+    console.groupEnd();
+    const targetSchedule = updateData.schedule;
+    const changes = {
+      start: updateData.start,
+      end: updateData.end,
+      ...(updateData.changes || {})
+    };
 
-    getCalInstance().updateSchedule(schedule.id, schedule.calendarId, changes);
+    getCalInstance().updateSchedule(targetSchedule.id, targetSchedule.calendarId, changes);
   };
 
   const onBeforeCreateSchedule = (scheduleData) => {
     const schedule = {
+      calendarId: scheduleData.calendarId || '',
       id: String(Math.random()),
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
@@ -484,19 +531,9 @@ function FunctionComponent({view}) {
       category: scheduleData.isAllDay ? 'allday' : 'time',
       dueDateClass: '',
       location: scheduleData.location,
-      raw: {
-        class: scheduleData.raw['class']
-      },
-      state: scheduleData.state
+      state: scheduleData.state,
+      isPrivate: scheduleData.isPrivate
     };
-    const calendar = calendars.find((cal) => cal.id === scheduleData.calendarId);
-
-    if (calendar) {
-      schedule.calendarId = calendar.id;
-      schedule.color = calendar.color;
-      schedule.bgColor = calendar.bgColor;
-      schedule.borderColor = calendar.borderColor;
-    }
 
     getCalInstance().createSchedules([schedule]);
   };
@@ -542,7 +579,7 @@ function FunctionComponent({view}) {
       </div>
       <Calendar
         usageStatistics={false}
-        calendars={calendars}
+        calendars={initialCalendars}
         defaultView={selectedView}
         disableDblClick={true}
         height="900px"
@@ -550,46 +587,7 @@ function FunctionComponent({view}) {
         month={{
           startDayOfWeek: 2
         }}
-        schedules={[
-          {
-            id: '1',
-            calendarId: '0',
-            title: 'TOAST UI Calendar Study',
-            category: 'time',
-            dueDateClass: '',
-            start: today.toISOString(),
-            end: getDate('hours', today, 3, '+').toISOString()
-          },
-          {
-            id: '2',
-            calendarId: '0',
-            title: 'Practice',
-            category: 'milestone',
-            dueDateClass: '',
-            start: getDate('date', today, 1, '+').toISOString(),
-            end: getDate('date', today, 1, '+').toISOString(),
-            isReadOnly: true
-          },
-          {
-            id: '3',
-            calendarId: '0',
-            title: 'FE Workshop',
-            category: 'allday',
-            dueDateClass: '',
-            start: getDate('date', today, 2, '-').toISOString(),
-            end: getDate('date', today, 1, '-').toISOString(),
-            isReadOnly: true
-          },
-          {
-            id: '4',
-            calendarId: '0',
-            title: 'Report',
-            category: 'time',
-            dueDateClass: '',
-            start: today.toISOString(),
-            end: getDate('hours', today, 1, '+').toISOString()
-          }
-        ]}
+        schedules={initialSchedules}
         scheduleView
         taskView
         template={{
@@ -647,6 +645,17 @@ export default {
 };
 
 export const WithClassComponent = (args) => <ClassComponent {...args} />;
+WithClassComponent.args = {
+  view: 'month'
+};
+WithClassComponent.argTypes = {
+  view: {
+    control: {
+      type: 'select',
+      options: ['month', 'week', 'day']
+    }
+  }
+};
 
 export const WithFunctionComponent = (args) => <FunctionComponent {...args} />;
 WithFunctionComponent.args = {
