@@ -33,11 +33,11 @@ export default class Calendar extends React.Component {
   calendarInst = null;
 
   componentDidMount() {
-    const {schedules = [], view} = this.props;
+    const {schedules = [], view, ...restProps} = this.props;
     const rootElement = this.getRootElement();
 
     this.calendarInst = new TuiCalendar(rootElement, {
-      ...this.props,
+      ...restProps,
       defaultView: view
     });
 
@@ -45,7 +45,7 @@ export default class Calendar extends React.Component {
 
     this.setSchedules(schedules);
 
-    this.bindEventHandlers(this.props);
+    this.bindEventHandlers(restProps);
   }
 
   shouldComponentUpdate(nextProps) {
