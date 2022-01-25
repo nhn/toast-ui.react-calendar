@@ -189,8 +189,62 @@ const MyComponent = () => (
 );
 ```
 
+
 #### Theme
-Write own theme object. [Link - See "themeConfig"](https://nhn.github.io/tui.calendar/latest/themeConfig)
+
+You can write your own theme object. [Link - See "themeConfig"](https://nhn.github.io/tui.calendar/latest/themeConfig)
+
+#### ⚠️ Note for passing props
+
+For performance reason and to avoid unnecessary re-rendering, it's recommended to extract props to the outside of the component or memoize them with `useMemo` when props don't have to be affected by component state changes.  
+The calendar component check props equality with the `react-fast-compare` library though, the `template` props are not comparable, so it will always invoke re-render if you pass the `template` prop as an object literal.
+
+For more information, check [this issue](https://github.com/nhn/toast-ui.react-calendar/issues/26#issuecomment-906929298).
+
+```jsx
+const calendars = [
+  {
+    id: '0',
+    name: 'Private',
+    bgColor: '#9e5fff',
+    borderColor: '#9e5fff'
+  },
+  {
+    id: '1',
+    name: 'Company',
+    bgColor: '#00a9ff',
+    borderColor: '#00a9ff'
+  }
+];
+const template = {
+  milestone(schedule) {
+    return `<span style="color:#fff;background-color: ${schedule.bgColor};">${
+            schedule.title
+    }</span>`;
+  },
+  milestoneTitle() {
+    return 'Milestone';
+  },
+  allday(schedule) {
+    return `${schedule.title}<i class="fa fa-refresh"></i>`;
+  },
+  alldayTitle() {
+    return 'All Day';
+  }
+};
+
+function MyCalendar() {
+  // ...
+  
+  return (
+    <Calendar
+      // ...
+      calendars={calendars}
+      template={template}
+    />
+  )
+}
+```
 
 ### Instance Methods
 
