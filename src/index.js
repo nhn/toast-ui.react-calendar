@@ -4,6 +4,7 @@
  */
 import React from 'react';
 import TuiCalendar from 'tui-calendar';
+import isEqual from 'react-fast-compare';
 
 /**
  * Calendar's options prop
@@ -33,11 +34,14 @@ export default class Calendar extends React.Component {
 
   componentDidMount() {
     const {schedules = [], view} = this.props;
+    const rootElement = this.getRootElement();
 
-    this.calendarInst = new TuiCalendar(this.rootEl.current, {
+    this.calendarInst = new TuiCalendar(rootElement, {
       ...this.props,
       defaultView: view
     });
+
+    rootElement.style.height = this.props.height;
 
     this.setSchedules(schedules);
 
@@ -48,19 +52,19 @@ export default class Calendar extends React.Component {
     const {calendars, height, schedules, theme, view} = this.props;
 
     if (height !== nextProps.height) {
-      this.getRootElement().style.height = height;
+      this.getRootElement().style.height = nextProps.height;
     }
 
-    if (calendars !== nextProps.calendars) {
+    if (!isEqual(calendars, nextProps.calendars)) {
       this.setCalendars(nextProps.calendars);
     }
 
-    if (schedules !== nextProps.schedules) {
+    if (!isEqual(schedules, nextProps.schedules)) {
       this.calendarInst.clear();
       this.setSchedules(nextProps.schedules);
     }
 
-    if (theme !== nextProps.theme) {
+    if (!isEqual(theme, nextProps.theme)) {
       this.calendarInst.setTheme(this.cloneData(nextProps.theme));
     }
 
@@ -69,12 +73,12 @@ export default class Calendar extends React.Component {
     }
 
     optionProps.forEach((key) => {
-      if (this.props[key] !== nextProps[key]) {
+      if (!isEqual(this.props[key], nextProps[key])) {
         this.setOptions(key, nextProps[key]);
       }
     });
 
-    this.bindEventHandlers(nextProps, this.props);
+    this.bindEventHandlers(this.props);
 
     return false;
   }
@@ -100,7 +104,7 @@ export default class Calendar extends React.Component {
   }
 
   setOptions(propKey, prop) {
-    this.calendarInst.setOptions({[propKey]: prop});
+    this.calendarInst.setOptions({[propKey]: prop}, true);
   }
 
   getInstance() {
@@ -122,6 +126,6 @@ export default class Calendar extends React.Component {
   };
 
   render() {
-    return <div ref={this.rootEl} style={{height: this.props.height}} />;
+    return <div className="tui-calendar-react-root" ref={this.rootEl} />;
   }
 }
