@@ -1,6 +1,6 @@
 {
   "name": "@toast-ui/react-calendar",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "React wrapper component for tui.calendar",
   "main": "dist/toastui-react-calendar.js",
   "types": "index.d.ts",
