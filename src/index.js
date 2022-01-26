@@ -99,7 +99,9 @@ export default class Calendar extends React.Component {
 
   setSchedules(schedules) {
     if (schedules && schedules.length) {
-      this.calendarInst.createSchedules(schedules);
+      const clonedSchedules = this.cloneData(schedules);
+
+      this.calendarInst.createSchedules(clonedSchedules);
     }
   }
 
