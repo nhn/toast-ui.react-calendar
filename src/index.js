@@ -4,7 +4,7 @@
  */
 import React from 'react';
 import TuiCalendar from 'tui-calendar';
-import isEqual from 'react-fast-compare';
+import {isEqual} from './isEqual';
 
 /**
  * Calendar's options prop
@@ -51,7 +51,7 @@ export default class Calendar extends React.Component {
   shouldComponentUpdate(nextProps) {
     const {calendars, height, schedules, theme, view} = this.props;
 
-    if (height !== nextProps.height) {
+    if (!isEqual(height, nextProps.height)) {
       this.getRootElement().style.height = nextProps.height;
     }
 
@@ -68,7 +68,7 @@ export default class Calendar extends React.Component {
       this.calendarInst.setTheme(this.cloneData(nextProps.theme));
     }
 
-    if (view !== nextProps.view) {
+    if (!isEqual(view, nextProps.view)) {
       this.calendarInst.changeView(nextProps.view);
     }
 
