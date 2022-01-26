@@ -196,8 +196,7 @@ You can write your own theme object. [Link - See "themeConfig"](https://nhn.gith
 
 #### ⚠️ Note for passing props
 
-For performance reason and to avoid unnecessary re-rendering, it's recommended to extract props to the outside of the component or memoize them with `useMemo` when props don't have to be affected by component state changes.  
-The calendar component check props equality with the `react-fast-compare` library though, the `template` props are not comparable, so it will always invoke re-render if you pass the `template` prop as an object literal.
+The calendar component check deep equality of `props` when re-rendered. However, for performance and to avoid unnecessary re-rendering, it's recommended to extract props to the outside of the component or memoize them with `useMemo` when props don't have to be affected by component state changes. 
 
 For more information, check [this issue](https://github.com/nhn/toast-ui.react-calendar/issues/26#issuecomment-906929298).
 
@@ -216,6 +215,8 @@ const calendars = [
     borderColor: '#00a9ff'
   }
 ];
+
+// Especially avoid to declare the `template` prop inside the component.
 const template = {
   milestone(schedule) {
     return `<span style="color:#fff;background-color: ${schedule.bgColor};">${
