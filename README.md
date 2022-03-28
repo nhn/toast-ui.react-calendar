@@ -6,7 +6,7 @@
 [![npm version](https://img.shields.io/npm/v/@toast-ui/react-calendar.svg)](https://www.npmjs.com/package/@toast-ui/react-calendar)
 [![license](https://img.shields.io/github/license/nhnent/toast-ui.vue-calendar.svg)](https://github.com/nhn/toast-ui.react-calendar/blob/master/LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg)](https://github.com/nhn/toast-ui.react-calendar/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
-[![code with hearth by NHN](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-NHN-ff1414.svg)](https://github.com/nhn)
+[![code with hearth by NHN Cloud](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-NHN_Cloud-ff1414.svg)](https://github.com/nhn)
 
 ## 🚩 Table of Contents
 * [Collect statistics on the use of open source](#collect-statistics-on-the-use-of-open-source)
@@ -362,4 +362,4 @@ For more information on PR's step, please see links of Contributing section.
 * [Commit convention](https://github.com/nhn/toast-ui.react-calendar/blob/master/docs/COMMIT_MESSAGE_CONVENTION.md)
 
 ## 📜 License
-This software is licensed under the [MIT](./LICENSE) © [NHN.](https://github.com/nhn)
+This software is licensed under the [MIT](./LICENSE) © [NHN Cloud](https://github.com/nhn).
